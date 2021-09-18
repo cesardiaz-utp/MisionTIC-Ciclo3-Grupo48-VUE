@@ -11,9 +11,9 @@
     </v-card-text>
 
     <v-card-actions>
-      <v-btn color="primary" > Edit </v-btn>
+      <v-btn color="primary" v-on:click="editUser(user.id)"> Edit </v-btn>
 
-      <v-btn color="red" dark> Delete </v-btn>
+      <v-btn color="red" dark @click="deleteUser(user.id)"> Delete </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -21,8 +21,21 @@
 <script>
 export default {
   props: ["user"],
-  mounted() {
-    console.log("user: ", this.user);
+  methods: {
+    editUser(id) {
+      console.log("editar", id);
+    },
+    deleteUser(id) {
+      let userList = JSON.parse(localStorage.getItem("userList"));
+      if (userList == undefined) {
+        console.error("La lista no contiene el usuario con id: "+id);
+        return;
+      }
+
+      userList = userList.filter((user) => user.id != id);
+      localStorage.setItem("userList", JSON.stringify(userList));
+      this.$emit('update');
+    },
   },
 };
 </script>
